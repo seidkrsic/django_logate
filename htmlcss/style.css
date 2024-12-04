@@ -1,0 +1,14 @@
+h1 { 
+    color: blue;
+    text-align: center;
+}
+
+.moj_stil { 
+    color: red;
+    font-size: 50px;
+}
+
+.moj_stil2 { 
+    color: green !important; 
+}
+
