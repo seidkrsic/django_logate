@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render 
 
 # Create your views here.
 
@@ -26,5 +26,4 @@ articles = {
 }
 
 def index(request): 
-
     return render(request, "wikipedia_app/index.html", {"articles" : articles }) 

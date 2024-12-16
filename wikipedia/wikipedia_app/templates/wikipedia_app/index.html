@@ -1,17 +1,28 @@
 {% extends "wikipedia_app/layout.html" %}
-
+{% load static %}
 
 {% block body %}
 
 
-<div>
+<div class="main__container">
+    
     <div class="search-container">
 
     </div>
 
     <div class="articles-container">
         <h1>All articles</h1> 
-        {{articles}} 
+        <div class="articles__small-container"> 
+            {% for key, value in articles.items %} 
+
+                <a href="" class="article__container"> 
+                    <h2>{{value.title}}</h2> 
+                    <p>{{value.content}}</p>
+                    <h6>{{value.date}}</h6>
+                </a>
+
+            {% endfor %}
+        </div>
     </div>
 </div> 
 
