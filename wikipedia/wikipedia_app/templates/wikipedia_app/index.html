@@ -5,7 +5,7 @@
 
 
 <div class="main__container">
-    
+
     <div class="search-container">
 
     </div>
@@ -15,9 +15,9 @@
         <div class="articles__small-container"> 
             {% for key, value in articles.items %} 
 
-                <a href="" class="article__container"> 
+                <a href="{% url 'article' value.id %}" class="article__container"> 
                     <h2>{{value.title}}</h2> 
-                    <p>{{value.content}}</p>
+                    <p>{{value.content | truncatewords:15}}</p>
                     <h6>{{value.date}}</h6>
                 </a>
 
