@@ -1,5 +1,7 @@
 from django.shortcuts import render 
-
+from django.http import HttpResponseRedirect 
+from django.urls import reverse 
+from django import forms
 # Create your views here.
 
 articles = {
@@ -31,6 +33,15 @@ articles = {
 
 }
 
+# forms 
+class CreateArticleForm(forms.Form): 
+    title = forms.CharField(label="Title", max_length=99) 
+    content = forms.Textarea(attrs={"cols" : 80, "rows" : 20, "placeholder" : "Enter Content"}) 
+
+
+
+# functions 
+
 def index(request): 
     return render(request, "wikipedia_app/index.html", {"articles" : articles }) 
 
@@ -42,3 +53,33 @@ def article(request, id):
             break 
         
     return render(request, "wikipedia_app/article.html", {"article" : article})  
+
+
+def search(request): 
+    if request.method == "POST": 
+        new_article = None 
+        title = request.POST["search"]
+        for article in articles.values(): 
+            if title == article["title"]: 
+                new_article = article 
+                break 
+
+        if new_article is not None: 
+            id = new_article["id"] 
+            return HttpResponseRedirect(reverse("article", args=(id, )))
+
+        return render(request, "wikipedia_app/index.html", { 
+            "articles" : articles, 
+            "error" : "Article with that title does not exists."
+        })
+    else: 
+        return render(request, "wikipedia_app/index.html", { 
+            "articles" : articles, 
+        })
+    
+
+def create(request):
+    form = CreateArticleForm() 
+    return render(request, "wikipedia_app/create.html", {
+        "form" : form, 
+    })

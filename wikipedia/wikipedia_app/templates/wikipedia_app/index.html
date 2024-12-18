@@ -7,11 +7,21 @@
 <div class="main__container">
 
     <div class="search-container">
-
+        <img src="{% static 'images/wikipedia.png' %}" alt="">
+        <form action="{% url 'search' %}" method="post" class="search-form">
+            {% csrf_token %} 
+            <input type="text" name="search">  
+            <input type="submit" value="Search">
+        </form>
+        {% if error %} 
+            <h6 class="red">{{error}}</h6> 
+        {% endif %}
     </div>
 
     <div class="articles-container">
+        <a class="create_link" href="{% url 'create' %}">Create New Article</a> 
         <h1>All articles</h1> 
+   
         <div class="articles__small-container"> 
             {% for key, value in articles.items %} 
 

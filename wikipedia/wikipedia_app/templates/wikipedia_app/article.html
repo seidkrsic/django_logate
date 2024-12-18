@@ -4,6 +4,11 @@
 
 {% block body %} 
 
-<h1>{{article}}</h1>
+<div class="article__detail-container">
+    <h1>{{article.title}}</h1>
+    <p>{{article.content}}</p>
+    <h5>{{article.date}}</h5>
+</div>
+
 
 {% endblock %}

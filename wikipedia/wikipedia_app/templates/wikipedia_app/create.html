@@ -1,0 +1,15 @@
+{% extends 'wikipedia_app/layout.html' %} 
+
+
+{% block body %} 
+<div class="article__create-container"> 
+    <h1>Create and article</h1>
+    <form action="{% url 'create' %}" method="post">
+        {{form}} 
+        <textarea name="" id="" cols="20" rows="20"></textarea>
+    </form>
+
+</div>
+
+
+{% endblock %}
