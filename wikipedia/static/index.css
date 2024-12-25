@@ -106,34 +106,29 @@ input[type="submit"] {
     color: orangered; 
 }
 
-/* this is new */
+
+/* stilizovanje create html */
 
 .article__create-container { 
+    display: flex; 
+    width: 40%;
+    flex-direction: column;
+    margin: 2rem auto; 
+} 
+
+.article__create-container form { 
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+}
+
+.article__create-container form div { 
+    width: 100%;
     display: flex;
     flex-direction: column;
-    width: 80%;
-    justify-content: center;
-    margin: 0 auto;
-
-} 
-
-.article__create-container h1 { 
-    width: 100%;
-    text-align: center;
-    margin: 2rem auto;
+    margin: 1rem auto;
 }
-.article__create-container form { 
-    display: flex; 
-    flex-direction: column;
-    width: 500px;
-    margin: 4rem auto;
-} 
-.article__create-container form div { 
-    display: flex; 
-    flex-direction: column;
-    margin: 1rem 0;
-} 
 
-.search-container { 
-    margin-bottom: 8rem;
+.article__create-container input { 
+    cursor: pointer; 
 }

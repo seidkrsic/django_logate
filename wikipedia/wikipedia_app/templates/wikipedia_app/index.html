@@ -29,6 +29,7 @@
                     <h2>{{value.title}}</h2> 
                     <p>{{value.content | truncatewords:15}}</p>
                     <h6>{{value.date}}</h6>
+                    <a href="{% url 'update' value.id %}">Edit</a>
                 </a>
 
             {% endfor %}

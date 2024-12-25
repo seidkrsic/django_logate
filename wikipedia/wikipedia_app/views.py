@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse 
 from django import forms
 # Create your views here.
-import datetime 
+from random import randint 
 
 articles = {
     'Article1': { 
@@ -30,23 +30,24 @@ articles = {
         'title': 'Football',
         'date': '20.06.1994',
         'content': "Football is a family of team sports that involve, to varying degrees, kicking a ball to score a goal. Unqualified, the word football normally means the form of football that is the most popular where the word is used. Sports commonly called football include association football (known as soccer in North America and Oceania); gridiron football (specifically American football or Canadian football); Australian rules football; rugby union and rugby league; and Gaelic football.[1] These various forms of football share to varying extent common origins and are known as football codes."
-    },
+    }, 
+    
 
 }
 
 # forms 
 class CreateArticleForm(forms.Form): 
-    title = forms.CharField(label="Title", max_length=99) 
-    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 20, 'cols': 40})) # this is new
+    title = forms.CharField(label="Title", max_length=99)
+    content = forms.CharField(widget=forms.Textarea(attrs={"rows": 20, "cols": 40})) 
 
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        # Check if title exists in articles
-        if title in articles:
-            raise forms.ValidationError("Title is already taken. Please choose another one.")
-        return title
+    def clean_title(self): 
+        title = self.cleaned_data["title"] 
+        for item in articles.values(): 
+            if title in item["title"]: 
+                raise forms.ValidationError("Title is already taken.") 
+        return title  
+ 
     
-
 # functions 
 
 def index(request): 
@@ -85,36 +86,27 @@ def search(request):
         })
     
 
-# def create(request):
-#     form = CreateArticleForm() 
-#     return render(request, "wikipedia_app/create.html", {
-#         "form" : form, 
-#     }) 
-
-# this is new 
-def create(request): 
-    if request.method == 'POST': 
-        form = CreateArticleForm(request.POST)  # Prosleđivanje POST podataka formi
+def create(request):
+    if request.method == "POST": 
+        form = CreateArticleForm(request.POST) 
         if form.is_valid(): 
             title = form.cleaned_data["title"]
-            content = form.cleaned_data["content"]
-            now = datetime.datetime.now()
-            unique_id = now.strftime("%Y%m%d%H%M%S%f")
-            articles[title] = {
-                'title': title,
-                'content': content,
-                'id': unique_id,
-                'date': now.strftime("%d.%m.%Y")
+            content = form.cleaned_data["content"] 
+            article = {
+                "id" : str(randint(100, 10000)), 
+                "title" : title, 
+                "content" : content, 
+                "date" : "24.12.2024", 
             }
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            # Prikaz forme sa greškama
-            return render(request, 'wikipedia_app/create.html', {
-                'form': form,
+            articles[title] = article
+            return HttpResponseRedirect(reverse("index")) 
+        else: 
+            return render(request, "wikipedia_app/create.html", { 
+                "form" : form,
             })
-    else: 
-        # Prikaz prazne forme
-        return render(request, 'wikipedia_app/create.html', {
-            "form": CreateArticleForm(),
-        })
+    return render(request, "wikipedia_app/create.html", {
+        "form" : CreateArticleForm(),  
+    }) 
+
+
 
