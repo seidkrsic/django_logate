@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse 
 from django import forms
 # Create your views here.
+import datetime 
 
 articles = {
     'Article1': { 
@@ -36,9 +37,15 @@ articles = {
 # forms 
 class CreateArticleForm(forms.Form): 
     title = forms.CharField(label="Title", max_length=99) 
-    content = forms.Textarea(attrs={"cols" : 80, "rows" : 20, "placeholder" : "Enter Content"}) 
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 20, 'cols': 40})) # this is new
 
-
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        # Check if title exists in articles
+        if title in articles:
+            raise forms.ValidationError("Title is already taken. Please choose another one.")
+        return title
+    
 
 # functions 
 
@@ -78,8 +85,36 @@ def search(request):
         })
     
 
-def create(request):
-    form = CreateArticleForm() 
-    return render(request, "wikipedia_app/create.html", {
-        "form" : form, 
-    })
+# def create(request):
+#     form = CreateArticleForm() 
+#     return render(request, "wikipedia_app/create.html", {
+#         "form" : form, 
+#     }) 
+
+# this is new 
+def create(request): 
+    if request.method == 'POST': 
+        form = CreateArticleForm(request.POST)  # Prosleđivanje POST podataka formi
+        if form.is_valid(): 
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            now = datetime.datetime.now()
+            unique_id = now.strftime("%Y%m%d%H%M%S%f")
+            articles[title] = {
+                'title': title,
+                'content': content,
+                'id': unique_id,
+                'date': now.strftime("%d.%m.%Y")
+            }
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            # Prikaz forme sa greškama
+            return render(request, 'wikipedia_app/create.html', {
+                'form': form,
+            })
+    else: 
+        # Prikaz prazne forme
+        return render(request, 'wikipedia_app/create.html', {
+            "form": CreateArticleForm(),
+        })
+
